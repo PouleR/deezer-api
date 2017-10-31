@@ -34,6 +34,8 @@ Before using the Deezer API, you'll need to create an app at [Deezer's developer
 After you've obtained an access token you can retrieve information from a user.
 
 ```php
+<?php
+
 require 'vendor/autoload.php';
 
 $client = new PouleR\DeezerAPI\DeezerAPIClient();
@@ -42,5 +44,4 @@ $client->setAccessToken('');
 $api = new PouleR\DeezerAPI\DeezerAPI($client);
 
 print_r($api->getUserInformation());
-}
 ```
