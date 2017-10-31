@@ -70,6 +70,59 @@ class DeezerAPITest extends TestCase
     }
 
     /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Create playlist: invalid title
+     */
+    public function testCreatePlaylistEmptyTitle()
+    {
+        $this->deezerApi->createPlaylist('');
+    }
+
+    /**
+     *
+     */
+    public function testCreatePlaylist()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/playlists', [], 'title=New playlist')
+            ->willReturn(['id' => '100']);
+
+        self::assertEquals(['id' => '100'], $this->deezerApi->createPlaylist('New playlist'));
+    }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Add tracks to playlist: invalid parameters
+     */
+    public function testAddTracksToPlaylistEmptyPlaylist()
+    {
+        $this->deezerApi->addTracksToPlaylist('', 'songs');
+    }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Add tracks to playlist: invalid parameters
+     */
+    public function testAddTracksToPlaylistEmptyTracks()
+    {
+        $this->deezerApi->addTracksToPlaylist('playlist', []);
+    }
+
+    /**
+     *
+     */
+    public function testAddTracksToPlaylist()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'playlist/12345/tracks', [], 'songs=unit,test,song')
+            ->willReturn('OK');
+
+        self::assertEquals('OK', $this->deezerApi->addTracksToPlaylist(12345, ['unit', 'test', 'song']));
+    }
+
+    /**
      *
      */
     public function testMyAlbums()

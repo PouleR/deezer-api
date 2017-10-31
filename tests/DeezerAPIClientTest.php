@@ -44,7 +44,7 @@ class DeezerAPIClientTest extends TestCase
         self::assertInstanceOf(\stdClass::class, $response);
 
         $this->client->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
-        $response = $this->client->apiRequest('GET', 'tracks');
+        $response = $this->client->apiRequest('GET', 'tracks', ['header' => ['unit' => 'test']], 'Body');
         self::assertTrue(is_array($response));
 
         $requests = $this->httpClient->getRequests();
@@ -53,6 +53,8 @@ class DeezerAPIClientTest extends TestCase
         self::assertEquals('api.deezer.com', $requests[0]->getUri()->getHost());
         self::assertEquals('/albums?access_token=test.token', $requests[0]->getRequestTarget());
         self::assertEquals('/tracks?access_token=test.token', $requests[1]->getRequestTarget());
+        self::assertEquals(['unit' => 'test'], $requests[1]->getHeader('header'));
+        self::assertEquals('Body', $requests[1]->getBody());
     }
 
     /**

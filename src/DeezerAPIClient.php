@@ -8,6 +8,7 @@ use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Class DeezerAPIClient
@@ -77,13 +78,14 @@ class DeezerAPIClient
     }
 
     /**
-     * @param string $method
-     * @param string $service
-     * @param array  $headers
+     * @param string                               $method
+     * @param string                               $service
+     * @param array                                $headers
+     * @param resource|string|StreamInterface|null $body
      * @return object|array
      * @throws DeezerAPIException
      */
-    public function apiRequest($method, $service, array $headers = [])
+    public function apiRequest($method, $service, array $headers = [], $body = null)
     {
         $url = sprintf(
             '%s/%s?access_token=%s',
@@ -94,7 +96,7 @@ class DeezerAPIClient
 
         try {
             $response = $this->httpClient->sendRequest(
-                $this->requestFactory->createRequest($method, $url, $headers)
+                $this->requestFactory->createRequest($method, $url, $headers, $body)
             );
         } catch (\Exception $exception) {
             throw new DeezerAPIException(
