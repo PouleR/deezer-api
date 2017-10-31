@@ -1,6 +1,13 @@
 {
     "name": "pouler/deezer-api",
     "description": "PHP Package for the Deezer API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul Radt",
+            "email": "paulradt@gmail.com"
+        }
+    ],
     "keywords": [ "deezer", "api" ],
     "homepage": "https://github.com/PouleR/deezer-api",
     "type": "library",
