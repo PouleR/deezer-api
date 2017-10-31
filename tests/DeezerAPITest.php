@@ -33,6 +33,14 @@ class DeezerAPITest extends TestCase
     /**
      *
      */
+    public function testDeezerAPIClient()
+    {
+        self::assertEquals($this->client, $this->deezerApi->getDeezerAPIClient());
+    }
+
+    /**
+     *
+     */
     public function testUserInformation()
     {
         $this->client->expects(static::once())

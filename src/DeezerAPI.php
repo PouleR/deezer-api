@@ -22,6 +22,14 @@ class DeezerAPI
     }
 
     /**
+     * @return DeezerAPIClient
+     */
+    public function getDeezerAPIClient()
+    {
+        return $this->client;
+    }
+
+    /**
      * @return array|object
      */
     public function getUserInformation()
