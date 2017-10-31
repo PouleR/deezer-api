@@ -22,10 +22,34 @@ class DeezerAPI
     }
 
     /**
-     *
+     * @return array|object
+     */
+    public function getUserInformation()
+    {
+        return $this->client->apiRequest('GET', 'user/me');
+    }
+
+    /**
+     * @return array|object
+     */
+    public function getPermissions()
+    {
+        return $this->client->apiRequest('GET', 'user/me/permissions');
+    }
+
+    /**
+     * @return array|object
      */
     public function getMyPlaylists()
     {
         return $this->client->apiRequest('GET', 'user/me/playlists');
+    }
+
+    /**
+     * @return array|object
+     */
+    public function getMyAlbums()
+    {
+        return $this->client->apiRequest('GET', 'user/me/albums');
     }
 }

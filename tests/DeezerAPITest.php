@@ -33,6 +33,32 @@ class DeezerAPITest extends TestCase
     /**
      *
      */
+    public function testUserInformation()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'user/me')
+            ->willReturn('{"name": "test"}');
+
+        self::assertEquals('{"name": "test"}', $this->deezerApi->getUserInformation());
+    }
+
+    /**
+     *
+     */
+    public function testPermissions()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'user/me/permissions')
+            ->willReturn('{"permissions":{"basic_access":true}}');
+
+        self::assertEquals('{"permissions":{"basic_access":true}}', $this->deezerApi->getPermissions());
+    }
+
+    /**
+     *
+     */
     public function testMyPlaylists()
     {
         $this->client->expects(static::once())
@@ -41,5 +67,18 @@ class DeezerAPITest extends TestCase
             ->willReturn('{}');
 
         self::assertEquals('{}', $this->deezerApi->getMyPlaylists());
+    }
+
+    /**
+     *
+     */
+    public function testMyAlbums()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'user/me/albums')
+            ->willReturn('{"data":[]}');
+
+        self::assertEquals('{"data":[]}', $this->deezerApi->getMyAlbums());
     }
 }
