@@ -1,5 +1,6 @@
 # Deezer API PHP
 
+[![Packagist](https://img.shields.io/packagist/v/pouler/deezer-api.svg)](https://packagist.org/packages/pouler/deezer-api)
 [![Build Status](https://travis-ci.org/PouleR/deezer-api.svg?branch=master)](https://travis-ci.org/PouleR/deezer-api)
 
 This is a PHP wrapper for the [Deezer API](https://developers.deezer.com/api/).
