@@ -30,6 +30,7 @@ class DeezerAPI
     }
 
     /**
+     * Return the user data.
      * @return array|object
      */
     public function getUserInformation()
@@ -38,6 +39,7 @@ class DeezerAPI
     }
 
     /**
+     * Return the user's Permissions granted to the application.
      * @return array|object
      */
     public function getPermissions()
@@ -46,6 +48,7 @@ class DeezerAPI
     }
 
     /**
+     * Return a list of user's public playlist.
      * @return array|object
      */
     public function getMyPlaylists()
@@ -54,6 +57,7 @@ class DeezerAPI
     }
 
     /**
+     * Create a playlist.
      * @param string $title
      * @return array|object
      * @throws DeezerAPIException
@@ -68,6 +72,7 @@ class DeezerAPI
     }
 
     /**
+     * Add tracks to a playlist.
      * @param string|int   $playlistId
      * @param string|array $trackIds
      * @return array|object
@@ -85,10 +90,26 @@ class DeezerAPI
     }
 
     /**
+     * Return a list of user's favorite albums.
      * @return array|object
      */
     public function getMyAlbums()
     {
         return $this->client->apiRequest('GET', 'user/me/albums');
+    }
+
+    /**
+     * Return a list of album's tracks.
+     * @param string|int $albumId
+     * @return array|object
+     * @throws DeezerAPIException
+     */
+    public function getAlbumTracks($albumId)
+    {
+        if (empty($albumId)) {
+            throw new DeezerAPIException('Get album tracks: invalid albumId');
+        }
+
+        return $this->client->apiRequest('GET', 'album/'.$albumId.'/tracks');
     }
 }

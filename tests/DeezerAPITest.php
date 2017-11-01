@@ -142,4 +142,26 @@ class DeezerAPITest extends TestCase
 
         self::assertEquals('{"data":[]}', $this->deezerApi->getMyAlbums());
     }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Get album tracks: invalid albumId
+     */
+    public function testAlbumTracksEmptyAlbum()
+    {
+        $this->deezerApi->getAlbumTracks('');
+    }
+
+    /**
+     *
+     */
+    public function testAlbumTracks()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'album/1234/tracks')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->getAlbumTracks(1234));
+    }
 }
