@@ -112,4 +112,34 @@ class DeezerAPI
 
         return $this->client->apiRequest('GET', 'album/'.$albumId.'/tracks');
     }
+
+    /**
+     * Add an artist to the user's favorites.
+     * @param string|int $artistId
+     * @return array|object
+     * @throws DeezerAPIException
+     */
+    public function addArtistToFavorites($artistId)
+    {
+        if (empty($artistId)) {
+            throw new DeezerAPIException('Favorite artist: invalid artistId');
+        }
+
+        return $this->client->apiRequest('POST', 'user/me/artists', [], sprintf('artist_id=%s', $artistId));
+    }
+
+    /**
+     * Follow user.
+     * @param string|int $userId
+     * @return array|object
+     * @throws DeezerAPIException
+     */
+    public function followUser($userId)
+    {
+        if (empty($userId)) {
+            throw new DeezerAPIException('Follow user: invalid userId');
+        }
+
+        return $this->client->apiRequest('POST', 'user/me/following', [], sprintf('user_id=%s', $userId));
+    }
 }

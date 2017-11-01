@@ -164,4 +164,48 @@ class DeezerAPITest extends TestCase
 
         self::assertEquals('{}', $this->deezerApi->getAlbumTracks(1234));
     }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Favorite artist: invalid artistId
+     */
+    public function testArtistToFavoritesEmptyArtist()
+    {
+        $this->deezerApi->addArtistToFavorites('');
+    }
+
+    /**
+     *
+     */
+    public function testArtistToFavorites()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/artists', [], 'artist_id=artist')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->addArtistToFavorites('artist'));
+    }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Follow user: invalid userId
+     */
+    public function testFollowUserEmptyUser()
+    {
+        $this->deezerApi->followUser(null);
+    }
+
+    /**
+     *
+     */
+    public function testFollowUser()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/following', [], 'user_id=user')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->followUser('user'));
+    }
 }
