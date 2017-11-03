@@ -208,4 +208,26 @@ class DeezerAPITest extends TestCase
 
         self::assertEquals('{}', $this->deezerApi->followUser('user'));
     }
+
+    /**
+     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
+     * @expectedExceptionMessage Favorite playlist: invalid playlistId
+     */
+    public function testPlaylistToFavoritesEmptyPlaylist()
+    {
+        $this->deezerApi->addPlaylistToFavorites(0);
+    }
+
+    /**
+     *
+     */
+    public function testPlaylistToFavorites()
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/playlists', [], 'playlist_id=1234')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->addPlaylistToFavorites(1234));
+    }
 }

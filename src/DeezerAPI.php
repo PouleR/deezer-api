@@ -142,4 +142,19 @@ class DeezerAPI
 
         return $this->client->apiRequest('POST', 'user/me/following', [], sprintf('user_id=%s', $userId));
     }
+
+    /**
+     * Add a playlist to the user's favorites.
+     * @param string|int $playlistId
+     * @return array|object
+     * @throws DeezerAPIException
+     */
+    public function addPlaylistToFavorites($playlistId)
+    {
+        if (empty($playlistId)) {
+            throw new DeezerAPIException('Favorite playlist: invalid playlistId');
+        }
+
+        return $this->client->apiRequest('POST', 'user/me/playlists', [], sprintf('playlist_id=%s', $playlistId));
+    }
 }
