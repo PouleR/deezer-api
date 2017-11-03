@@ -203,7 +203,7 @@ class DeezerAPITest extends TestCase
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
-            ->with('POST', 'user/me/following', [], 'user_id=user')
+            ->with('POST', 'user/me/followings', [], 'user_id=user')
             ->willReturn('{}');
 
         self::assertEquals('{}', $this->deezerApi->followUser('user'));

@@ -140,7 +140,7 @@ class DeezerAPI
             throw new DeezerAPIException('Follow user: invalid userId');
         }
 
-        return $this->client->apiRequest('POST', 'user/me/following', [], sprintf('user_id=%s', $userId));
+        return $this->client->apiRequest('POST', 'user/me/followings', [], sprintf('user_id=%s', $userId));
     }
 
     /**
