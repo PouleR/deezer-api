@@ -68,4 +68,14 @@ class DeezerAPIClientTest extends TestCase
         $this->httpClient->addException(new \Exception('Deezer error', 500));
         $this->client->apiRequest('GET', 'albums');
     }
+
+    /**
+     *
+     */
+    public function testResponseType()
+    {
+        self::assertEquals(DeezerAPIClient::RETURN_AS_OBJECT, $this->client->getResponseType());
+        $this->client->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
+        self::assertEquals(DeezerAPIClient::RETURN_AS_ASSOC, $this->client->getResponseType());
+    }
 }

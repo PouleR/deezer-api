@@ -78,6 +78,14 @@ class DeezerAPIClient
     }
 
     /**
+     * @return int
+     */
+    public function getResponseType()
+    {
+        return $this->responseType;
+    }
+
+    /**
      * @param string                               $method
      * @param string                               $service
      * @param array                                $headers
