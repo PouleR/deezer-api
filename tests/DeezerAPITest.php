@@ -2,9 +2,11 @@
 
 namespace PouleR\DeezerAPI\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PouleR\DeezerAPI\DeezerAPI;
 use PouleR\DeezerAPI\DeezerAPIClient;
+use PouleR\DeezerAPI\DeezerAPIException;
 
 /**
  * Class DeezerAPITest
@@ -12,7 +14,7 @@ use PouleR\DeezerAPI\DeezerAPIClient;
 class DeezerAPITest extends TestCase
 {
     /**
-     * @var DeezerAPIClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeezerAPIClient|MockObject
      */
     private $client;
 
@@ -24,7 +26,7 @@ class DeezerAPITest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = $this->createMock(DeezerAPIClient::class);
         $this->deezerApi = new DeezerAPI($this->client);
@@ -33,15 +35,15 @@ class DeezerAPITest extends TestCase
     /**
      *
      */
-    public function testDeezerAPIClient()
+    public function testDeezerAPIClient(): void
     {
         self::assertEquals($this->client, $this->deezerApi->getDeezerAPIClient());
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testUserInformation()
+    public function testUserInformation(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -52,9 +54,9 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testPermissions()
+    public function testPermissions(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -65,9 +67,9 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testMyPlaylists()
+    public function testMyPlaylists(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -78,18 +80,19 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Create playlist: invalid title
+     * @throws DeezerAPIException
      */
-    public function testCreatePlaylistEmptyTitle()
+    public function testCreatePlaylistEmptyTitle(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Create playlist: invalid title');
         $this->deezerApi->createPlaylist('');
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testCreatePlaylist()
+    public function testCreatePlaylist(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -100,27 +103,29 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Add tracks to playlist: invalid parameters
+     * @throws DeezerAPIException
      */
-    public function testAddTracksToPlaylistEmptyPlaylist()
+    public function testAddTracksToPlaylistEmptyPlaylist(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Add tracks to playlist: invalid parameters');
         $this->deezerApi->addTracksToPlaylist('', 'songs');
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Add tracks to playlist: invalid parameters
+     * @throws DeezerAPIException
      */
-    public function testAddTracksToPlaylistEmptyTracks()
+    public function testAddTracksToPlaylistEmptyTracks(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Add tracks to playlist: invalid parameters');
         $this->deezerApi->addTracksToPlaylist('playlist', []);
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testAddTracksToPlaylist()
+    public function testAddTracksToPlaylist(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -131,9 +136,9 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testMyAlbums()
+    public function testMyAlbums(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -144,18 +149,19 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Get album tracks: invalid albumId
+     * @throws DeezerAPIException
      */
-    public function testAlbumTracksEmptyAlbum()
+    public function testAlbumTracksEmptyAlbum(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Get album tracks: invalid albumId');
         $this->deezerApi->getAlbumTracks('');
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testAlbumTracks()
+    public function testAlbumTracks(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -166,18 +172,19 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Favorite artist: invalid artistId
+     * @throws DeezerAPIException
      */
-    public function testArtistToFavoritesEmptyArtist()
+    public function testArtistToFavoritesEmptyArtist(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Favorite artist: invalid artistId');
         $this->deezerApi->addArtistToFavorites('');
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testArtistToFavorites()
+    public function testArtistToFavorites(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -188,18 +195,19 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Follow user: invalid userId
+     * @throws DeezerAPIException
      */
-    public function testFollowUserEmptyUser()
+    public function testFollowUserEmptyUser(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Follow user: invalid userId');
         $this->deezerApi->followUser(null);
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testFollowUser()
+    public function testFollowUser(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -210,18 +218,19 @@ class DeezerAPITest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage Favorite playlist: invalid playlistId
+     * @throws DeezerAPIException
      */
-    public function testPlaylistToFavoritesEmptyPlaylist()
+    public function testPlaylistToFavoritesEmptyPlaylist(): void
     {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Favorite playlist: invalid playlistId');
         $this->deezerApi->addPlaylistToFavorites(0);
     }
 
     /**
-     *
+     * @throws DeezerAPIException
      */
-    public function testPlaylistToFavorites()
+    public function testPlaylistToFavorites(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')

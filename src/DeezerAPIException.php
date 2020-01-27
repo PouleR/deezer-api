@@ -3,7 +3,7 @@
 namespace PouleR\DeezerAPI;
 
 /**
- * Class DeezerAPIException
+ * Class DeezerAPIException.
  */
 class DeezerAPIException extends \Exception
 {

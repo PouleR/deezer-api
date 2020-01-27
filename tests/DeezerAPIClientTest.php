@@ -2,80 +2,68 @@
 
 namespace PouleR\DeezerAPI\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use PouleR\DeezerAPI\DeezerAPIClient;
+use PouleR\DeezerAPI\DeezerAPIException;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * Class DeezerAPIClientTest
+ * Class DeezerAPIClientTest.
   */
 class DeezerAPIClientTest extends TestCase
 {
     /**
-     * @var Client
+     * @throws DeezerAPIException
      */
-    private $httpClient;
-
-    /**
-     * @var DeezerAPIClient
-     */
-    private $client;
-
-    /**
-     *
-     */
-    public function setUp()
+    public function testAPIRequest(): void
     {
-        $this->httpClient = new Client();
-        $this->client = new DeezerAPIClient($this->httpClient);
-    }
+        $mockResponse1 = new MockResponse('{"id": "12345","title": "Test"}');
+        $mockResponse2 = new MockResponse('{"id": "54321","title": "Unit"}');
+        $httpClient = new MockHttpClient([$mockResponse1, $mockResponse2]);
+        $apiClient = new DeezerAPIClient($httpClient);
 
-    /**
-     *
-     */
-    public function testAPIRequest()
-    {
-        $this->client->setAccessToken('test.token');
-        $this->httpClient->addResponse(new Response(200, [], '{"id": "12345","title": "Test"}'));
-        $this->httpClient->addResponse(new Response(200, [], '{"id": "54321","title": "Unit"}'));
-
-        $response = $this->client->apiRequest('GET', 'albums');
+        $apiClient->setAccessToken('test.token');
+        $response = $apiClient->apiRequest('GET', 'albums');
         self::assertInstanceOf(\stdClass::class, $response);
 
-        $this->client->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
-        $response = $this->client->apiRequest('GET', 'tracks', ['header' => ['unit' => 'test']], 'Body');
+        $apiClient->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
+        $response = $apiClient->apiRequest('GET', 'tracks', ['header' => ['unit' => 'test']], 'Body');
         self::assertTrue(is_array($response));
 
-        $requests = $this->httpClient->getRequests();
-        self::assertCount(2, $requests);
-        self::assertEquals('GET', $requests[0]->getMethod());
-        self::assertEquals('api.deezer.com', $requests[0]->getUri()->getHost());
-        self::assertEquals('/albums?access_token=test.token', $requests[0]->getRequestTarget());
-        self::assertEquals('/tracks?access_token=test.token', $requests[1]->getRequestTarget());
-        self::assertEquals(['unit' => 'test'], $requests[1]->getHeader('header'));
-        self::assertEquals('Body', $requests[1]->getBody());
+        $requestOptions = $mockResponse2->getRequestOptions();
+        self::assertContains('header: test', $requestOptions['headers']);
     }
 
     /**
-     * @expectedException \PouleR\DeezerAPI\DeezerAPIException
-     * @expectedExceptionMessage API Request: albums, Deezer error
-     * @expectedExceptionCode 500
+     * @throws DeezerAPIException
      */
-    public function testAPIRequestException()
+    public function testAPIRequestException(): void
     {
-        $this->client->setAccessToken('test.token');
-        $this->httpClient->addException(new \Exception('Deezer error', 500));
-        $this->client->apiRequest('GET', 'albums');
+        $callback = function () {
+            throw new TransportException('Deezer error', 500);
+        };
+
+        $httpClient = new MockHttpClient($callback);
+        $apiClient = new DeezerAPIClient($httpClient);
+        $apiClient->setAccessToken('test.token');
+
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('API Request: albums, Deezer error');
+        $this->expectExceptionCode(500);
+        $apiClient->apiRequest('GET', 'albums');
     }
 
     /**
      *
      */
-    public function testResponseType()
+    public function testResponseType(): void
     {
-        self::assertEquals(DeezerAPIClient::RETURN_AS_OBJECT, $this->client->getResponseType());
-        $this->client->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
-        self::assertEquals(DeezerAPIClient::RETURN_AS_ASSOC, $this->client->getResponseType());
+        $httpClient = new MockHttpClient();
+        $apiClient = new DeezerAPIClient($httpClient);
+        self::assertEquals(DeezerAPIClient::RETURN_AS_OBJECT, $apiClient->getResponseType());
+        $apiClient->setResponseType(DeezerAPIClient::RETURN_AS_ASSOC);
+        self::assertEquals(DeezerAPIClient::RETURN_AS_ASSOC, $apiClient->getResponseType());
     }
 }

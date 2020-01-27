@@ -3,7 +3,7 @@
 namespace PouleR\DeezerAPI;
 
 /**
- * Class DeezerAPI
+ * Class DeezerAPI.
  */
 class DeezerAPI
 {
@@ -31,6 +31,9 @@ class DeezerAPI
 
     /**
      * Return the user data.
+     *
+     * @throws DeezerAPIException
+     *
      * @return array|object
      */
     public function getUserInformation()
@@ -40,6 +43,9 @@ class DeezerAPI
 
     /**
      * Return the user's Permissions granted to the application.
+     *
+     * @throws DeezerAPIException
+     *
      * @return array|object
      */
     public function getPermissions()
@@ -49,6 +55,9 @@ class DeezerAPI
 
     /**
      * Return a list of user's public playlist.
+     *
+     * @throws DeezerAPIException
+     *
      * @return array|object
      */
     public function getMyPlaylists()
@@ -58,8 +67,11 @@ class DeezerAPI
 
     /**
      * Create a playlist.
+     *
      * @param string $title
+     *
      * @return array|object
+     *(
      * @throws DeezerAPIException
      */
     public function createPlaylist($title)
@@ -73,9 +85,12 @@ class DeezerAPI
 
     /**
      * Add tracks to a playlist.
+     *
      * @param string|int   $playlistId
      * @param string|array $trackIds
+     *
      * @return array|object
+     *
      * @throws DeezerAPIException
      */
     public function addTracksToPlaylist($playlistId, $trackIds)
@@ -91,6 +106,9 @@ class DeezerAPI
 
     /**
      * Return a list of user's favorite albums.
+     *
+     * @throws DeezerAPIException
+     *
      * @return array|object
      */
     public function getMyAlbums()
@@ -100,8 +118,11 @@ class DeezerAPI
 
     /**
      * Return a list of album's tracks.
+     *
      * @param string|int $albumId
+     *
      * @return array|object
+     *
      * @throws DeezerAPIException
      */
     public function getAlbumTracks($albumId)
@@ -115,8 +136,11 @@ class DeezerAPI
 
     /**
      * Add an artist to the user's favorites.
+     *
      * @param string|int $artistId
+     *
      * @return array|object
+     *
      * @throws DeezerAPIException
      */
     public function addArtistToFavorites($artistId)
@@ -130,8 +154,11 @@ class DeezerAPI
 
     /**
      * Follow user.
+     *
      * @param string|int $userId
+     *
      * @return array|object
+     *
      * @throws DeezerAPIException
      */
     public function followUser($userId)
@@ -145,8 +172,11 @@ class DeezerAPI
 
     /**
      * Add a playlist to the user's favorites.
+     *
      * @param string|int $playlistId
+     *
      * @return array|object
+     *
      * @throws DeezerAPIException
      */
     public function addPlaylistToFavorites($playlistId)

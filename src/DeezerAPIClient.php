@@ -2,13 +2,11 @@
 
 namespace PouleR\DeezerAPI;
 
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\RequestFactory;
-use Psr\Http\Message\StreamInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Class DeezerAPIClient
@@ -24,14 +22,9 @@ class DeezerAPIClient
     const RETURN_AS_ASSOC = 1;
 
     /**
-     * @var PluginClient|HttpClient|null
+     * @var HttpClientInterface
      */
     protected $httpClient;
-
-    /**
-     * @var RequestFactory
-     */
-    protected $requestFactory;
 
     /**
      * @var string
@@ -45,20 +38,11 @@ class DeezerAPIClient
 
     /**
      * DeezerAPIClient constructor.
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
+     * @param HttpClientInterface $httpClient
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
+    public function __construct(HttpClientInterface $httpClient)
     {
-        if (!$httpClient) {
-            $httpClient = new PluginClient(
-                HttpClientDiscovery::find(),
-                [new ErrorPlugin()]
-            );
-        }
-
         $this->httpClient = $httpClient;
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -86,11 +70,13 @@ class DeezerAPIClient
     }
 
     /**
-     * @param string                               $method
-     * @param string                               $service
-     * @param array                                $headers
-     * @param resource|string|StreamInterface|null $body
+     * @param string                                      $method
+     * @param string                                      $service
+     * @param array                                       $headers
+     * @param array|string|resource|\Traversable|\Closure $body
+     *
      * @return object|array
+     *
      * @throws DeezerAPIException
      */
     public function apiRequest($method, $service, array $headers = [], $body = null)
@@ -103,16 +89,14 @@ class DeezerAPIClient
         );
 
         try {
-            $response = $this->httpClient->sendRequest(
-                $this->requestFactory->createRequest($method, $url, $headers, $body)
-            );
-        } catch (\Exception $exception) {
+            $response = $this->httpClient->request($method, $url, ['headers' => $headers, 'body' => $body]);
+
+            return json_decode($response->getContent(), $this->responseType === self::RETURN_AS_ASSOC);
+        } catch (ServerExceptionInterface | ClientExceptionInterface | RedirectionExceptionInterface | TransportExceptionInterface $exception) {
             throw new DeezerAPIException(
                 'API Request: '.$service.', '.$exception->getMessage(),
                 $exception->getCode()
             );
         }
-
-        return json_decode($response->getBody(), $this->responseType === self::RETURN_AS_ASSOC);
     }
 }
