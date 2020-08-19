@@ -197,6 +197,52 @@ class DeezerAPITest extends TestCase
     /**
      * @throws DeezerAPIException
      */
+    public function testAlbumToLibraryEmptyAlbumId(): void
+    {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Album library: invalid albumId');
+        $this->deezerApi->addAlbumToLibrary('');
+    }
+
+    /**
+     * @throws DeezerAPIException
+     */
+    public function testAlbumToLibrary(): void
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/albums', [], 'album_id=789')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->addAlbumToLibrary('789'));
+    }
+
+    /**
+     * @throws DeezerAPIException
+     */
+    public function testTrackToFavoritesEmptyTrackId(): void
+    {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('Track favorites: invalid trackId');
+        $this->deezerApi->addTrackToFavorites('');
+    }
+
+    /**
+     * @throws DeezerAPIException
+     */
+    public function testTrackToFavorites(): void
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('POST', 'user/me/tracks', [], 'track_id=12345')
+            ->willReturn('{}');
+
+        self::assertEquals('{}', $this->deezerApi->addTrackToFavorites('12345'));
+    }
+
+    /**
+     * @throws DeezerAPIException
+     */
     public function testFollowUserEmptyUser(): void
     {
         $this->expectException(DeezerAPIException::class);
