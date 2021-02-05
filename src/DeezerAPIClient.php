@@ -48,7 +48,7 @@ class DeezerAPIClient
     /**
      * @param string $accessToken
      */
-    public function setAccessToken($accessToken)
+    public function setAccessToken(string $accessToken): void
     {
         $this->accessToken = $accessToken;
     }
@@ -56,7 +56,7 @@ class DeezerAPIClient
     /**
      * @param int $responseType
      */
-    public function setResponseType($responseType)
+    public function setResponseType(int $responseType): void
     {
         $this->responseType = $responseType;
     }
@@ -64,7 +64,7 @@ class DeezerAPIClient
     /**
      * @return int
      */
-    public function getResponseType()
+    public function getResponseType(): int
     {
         return $this->responseType;
     }
@@ -79,7 +79,7 @@ class DeezerAPIClient
      *
      * @throws DeezerAPIException
      */
-    public function apiRequest($method, $service, array $headers = [], $body = null)
+    public function apiRequest(string $method, string $service, array $headers = [], $body = null)
     {
         $url = sprintf(
             '%s/%s?access_token=%s',

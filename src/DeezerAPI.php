@@ -24,7 +24,7 @@ class DeezerAPI
     /**
      * @return DeezerAPIClient
      */
-    public function getDeezerAPIClient()
+    public function getDeezerAPIClient(): DeezerAPIClient
     {
         return $this->client;
     }
