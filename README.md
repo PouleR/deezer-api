@@ -5,7 +5,7 @@
 This is a PHP wrapper for the [Deezer API](https://developers.deezer.com/api/).
 
 ## Requirements
-* PHP ^7.3|^8.0
+* PHP >=8.1
 
 ## Installation
 Install it using [Composer](https://getcomposer.org/):
