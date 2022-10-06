@@ -226,7 +226,7 @@ class DeezerAPI
     }
 
     /**
-     * FunctionDescription
+     * Send a search query
      *
      * @param $query
      * @param $strict
