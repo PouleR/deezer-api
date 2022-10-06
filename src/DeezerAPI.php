@@ -10,7 +10,7 @@ class DeezerAPI
     /**
      * @var DeezerAPIClient
      */
-    protected $client;
+    protected DeezerAPIClient $client;
 
     /**
      * DeezerAPI constructor.
@@ -228,15 +228,15 @@ class DeezerAPI
     /**
      * Send a search query
      *
-     * @param $query
-     * @param $strict
-     * @param $order
+     * @param string      $query
+     * @param bool        $strict
+     * @param string|null $order
      *
      * @return array|object
      *
      * @throws DeezerAPIException
      */
-    public function search($query, $strict = false, $order = null)
+    public function search(string $query, bool $strict = false, string $order = null): object|array
     {
         if (empty($query)) {
             throw new DeezerAPIException('A query parameter is mandatory');
