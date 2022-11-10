@@ -74,22 +74,28 @@ class DeezerAPIClient
      * @param string                                      $service
      * @param array                                       $headers
      * @param array|string|resource|\Traversable|\Closure $body
+     * @param array|null                                  $query
      *
      * @return object|array
      *
      * @throws DeezerAPIException
      */
-    public function apiRequest(string $method, string $service, array $headers = [], $body = null)
+    public function apiRequest(string $method, string $service, array $headers = [], $body = null, $query = null)
     {
-        $url = sprintf(
-            '%s/%s?access_token=%s',
-            self::DEEZER_API_URL,
-            $service,
-            $this->accessToken
-        );
+        $url = sprintf('%s/%s', self::DEEZER_API_URL, $service);
+
+        if (null === $query) {
+            $query = [];
+        }
+
+        $query['access_token'] = $this->accessToken;
 
         try {
-            $response = $this->httpClient->request($method, $url, ['headers' => $headers, 'body' => $body]);
+            $response = $this->httpClient->request($method, $url, [
+                'headers' => $headers,
+                'body' => $body,
+                'query' => $query
+            ]);
 
             return json_decode($response->getContent(), $this->responseType === self::RETURN_AS_ASSOC);
         } catch (ServerExceptionInterface | ClientExceptionInterface | RedirectionExceptionInterface | TransportExceptionInterface $exception) {
