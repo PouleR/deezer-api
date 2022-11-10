@@ -89,6 +89,7 @@ class DeezerAPIClient
         }
 
         $query['access_token'] = $this->accessToken;
+        $url.= '?'.http_build_query($query);
 
         try {
             $response = $this->httpClient->request($method, $url, [
