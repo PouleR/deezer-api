@@ -224,4 +224,34 @@ class DeezerAPI
 
         return $this->client->apiRequest('POST', 'user/me/playlists', [], sprintf('playlist_id=%s', $playlistId));
     }
+
+    /**
+     * FunctionDescription
+     *
+     * @param $query
+     * @param $strict
+     * @param $order
+     *
+     * @return array|object
+     *
+     * @throws DeezerAPIException
+     */
+    public function search($query, $strict = false, $order = null)
+    {
+        if (empty($query)) {
+            throw new DeezerAPIException('A query parameter is mandatory');
+        }
+
+        $parameters = sprintf('q=%s', $query);
+
+        if (true === $strict) {
+            $parameters.= '&strict=on';
+        }
+
+        if ($order) {
+            $parameters.= sprintf('&order=%s', $order);
+        }
+
+        return $this->client->apiRequest('GET', 'search', [], $parameters);
+    }
 }
