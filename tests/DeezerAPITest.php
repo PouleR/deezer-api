@@ -285,4 +285,26 @@ class DeezerAPITest extends TestCase
 
         self::assertEquals('{}', $this->deezerApi->addPlaylistToFavorites(1234));
     }
+
+    /***
+     * @throws DeezerAPIException
+     */
+    public function testInvalidSearchQuery(): void
+    {
+        $this->expectException(DeezerAPIException::class);
+        $this->expectExceptionMessage('A query parameter is mandatory');
+        $this->deezerApi->search('');
+    }
+
+    /**
+     * @throws DeezerAPIException
+     */
+    public function testSearch(): void
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'search', [], 'q=bohemian&strict=on&order=RANKING')
+            ->willReturn('{}');
+        $this->deezerApi->search('bohemian', true, 'RANKING');
+    }
 }
