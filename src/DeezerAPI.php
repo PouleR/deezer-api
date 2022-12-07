@@ -226,8 +226,6 @@ class DeezerAPI
     }
 
     /**
-     * Send a search query
-     *
      * @param string      $query
      * @param bool        $strict
      * @param string|null $order
