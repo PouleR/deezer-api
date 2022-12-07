@@ -303,8 +303,8 @@ class DeezerAPITest extends TestCase
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
-            ->with('GET', 'search', [], 'q=bohemian&strict=on&order=RANKING')
-            ->willReturn('{}');
+            ->with('GET', 'search', [], null, ['q' => 'bohemian', 'strict' => 'on', 'order' => 'RANKING'])
+            ->willReturn([]);
         $this->deezerApi->search('bohemian', true, 'RANKING');
     }
 }
