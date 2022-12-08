@@ -229,12 +229,13 @@ class DeezerAPI
      * @param string      $query
      * @param bool        $strict
      * @param string|null $order
+     * @param string|null $type
      *
      * @return array|object
      *
      * @throws DeezerAPIException
      */
-    public function search(string $query, bool $strict = false, string $order = null): object|array
+    public function search(string $query, bool $strict = false, string $order = null, ?string $type = null): object|array
     {
         if (empty($query)) {
             throw new DeezerAPIException('A query parameter is mandatory');
@@ -250,6 +251,11 @@ class DeezerAPI
             $apiQuery['order'] = $order;
         }
 
-        return $this->client->apiRequest('GET', 'search', [], null, $apiQuery);
+        $endpoint = 'search';
+        if (null !== $type) {
+            $endpoint.= '/'.urlencode($type);
+        }
+
+        return $this->client->apiRequest('GET', $endpoint, [], null, $apiQuery);
     }
 }

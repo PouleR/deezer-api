@@ -307,4 +307,16 @@ class DeezerAPITest extends TestCase
             ->willReturn([]);
         $this->deezerApi->search('bohemian', true, 'RANKING');
     }
+
+    /**
+     * @throws DeezerAPIException
+     */
+    public function testSearchArtist(): void
+    {
+        $this->client->expects(static::once())
+            ->method('apiRequest')
+            ->with('GET', 'search/artist', [], null, ['q' => 'bohemian', 'strict' => 'on', 'order' => 'RANKING'])
+            ->willReturn([]);
+        $this->deezerApi->search('bohemian', true, 'RANKING', 'artist');
+    }
 }
